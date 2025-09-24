@@ -219,9 +219,8 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ## 📞 联系方式
 
-- 邮箱: hello@myblog.com
-- GitHub: [yourusername](https://github.com/yourusername)
-- Twitter: [@yourusername](https://twitter.com/yourusername)
+- 邮箱: 1042026822@qq.com
+- GitHub: [Cauchy-X](https://github.com/Cauchy-X)
 
 ---
 
