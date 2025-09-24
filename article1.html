@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深入理解React Hooks - 我的个人博客</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="article-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1><a href="index.html">我的博客</a></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">首页</a></li>
+                <li><a href="index.html#about" class="nav-link">关于我</a></li>
+                <li><a href="index.html#blog" class="nav-link">博客</a></li>
+                <li><a href="index.html#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头部 -->
+    <header class="article-header">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html">首页</a>
+                <span>/</span>
+                <a href="index.html#blog">博客</a>
+                <span>/</span>
+                <span>深入理解React Hooks</span>
+            </nav>
+            <h1 class="article-title">深入理解React Hooks</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <i class="far fa-calendar"></i>
+                    <span>2024年1月15日</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-clock"></i>
+                    <span>5分钟阅读</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-user"></i>
+                    <span>博主</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-folder"></i>
+                    <span>技术</span>
+                </div>
+            </div>
+            <div class="article-tags">
+                <span class="tag">React</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">前端</span>
+                <span class="tag">Hooks</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 文章内容 -->
+    <main class="article-content">
+        <div class="container">
+            <article>
+                <div class="article-image">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="React Hooks">
+                </div>
+
+                <div class="article-body">
+                    <h2>什么是React Hooks？</h2>
+                    <p>React Hooks是React 16.8版本引入的一项革命性特性，它允许你在不编写class的情况下使用state以及其他的React特性。Hooks的出现解决了React中许多长期存在的问题，让函数组件变得更加强大和灵活。</p>
+
+                    <h2>为什么需要Hooks？</h2>
+                    <p>在Hooks出现之前，React组件主要有两种形式：</p>
+                    <ul>
+                        <li><strong>函数组件</strong>：简单、易测试，但无法使用state和生命周期方法</li>
+                        <li><strong>类组件</strong>：功能完整，但代码冗长，this指向问题复杂</li>
+                    </ul>
+
+                    <p>Hooks的出现让我们能够在函数组件中使用state、副作用等特性，同时避免了类组件的复杂性。</p>
+
+                    <h2>最常用的Hooks</h2>
+
+                    <h3>1. useState - 状态管理</h3>
+                    <p>useState是最基础的Hook，用于在函数组件中添加状态。</p>
+                    <pre><code class="language-javascript">
+import React, { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0);
+    
+    return (
+        <div>
+            <p>你点击了 {count} 次</p>
+            <button onClick={() => setCount(count + 1)}>
+                点击我
+            </button>
+        </div>
+    );
+}
+                    </code></pre>
+
+                    <h3>2. useEffect - 副作用处理</h3>
+                    <p>useEffect用于处理副作用，相当于类组件中的componentDidMount、componentDidUpdate和componentWillUnmount的组合。</p>
+                    <pre><code class="language-javascript">
+import React, { useState, useEffect } from 'react';
+
+function Example() {
+    const [count, setCount] = useState(0);
+
+    // 相当于componentDidMount和componentDidUpdate
+    useEffect(() => {
+        document.title = `你点击了 ${count} 次`;
+        
+        // 返回清理函数，相当于componentWillUnmount
+        return () => {
+            document.title = 'React App';
+        };
+    }, [count]); // 仅在count改变时重新执行
+
+    return (
+        <div>
+            <p>你点击了 {count} 次</p>
+            <button onClick={() => setCount(count + 1)}>
+                点击我
+            </button>
+        </div>
+    );
+}
+                    </code></pre>
+
+                    <h3>3. useContext - 上下文消费</h3>
+                    <p>useContext让你在不使用嵌套的情况下订阅React上下文。</p>
+                    <pre><code class="language-javascript">
+import React, { useContext } from 'react';
+
+const ThemeContext = React.createContext('light');
+
+function ThemedButton() {
+    const theme = useContext(ThemeContext);
+    
+    return (
+        <button style={{ background: theme === 'dark' ? '#333' : '#fff', color: theme === 'dark' ? '#fff' : '#333' }}>
+            我是{theme}模式的按钮
+        </button>
+    );
+}
+                    </code></pre>
+
+                    <h2>自定义Hooks</h2>
+                    <p>自定义Hooks是React的一个强大特性，它允许你将组件逻辑提取到可重用的函数中。</p>
+
+                    <pre><code class="language-javascript">
+import { useState, useEffect } from 'react';
+
+function useWindowSize() {
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        }
+        
+        window.addEventListener('resize', handleResize);
+        
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    return windowSize;
+}
+
+// 使用自定义Hook
+function MyComponent() {
+    const { width, height } = useWindowSize();
+    
+    return (
+        <div>
+            窗口大小: {width} x {height}
+        </div>
+    );
+}
+                    </code></pre>
+
+                    <h2>Hooks的规则</h2>
+                    <p>使用Hooks时需要遵循两条重要规则：</p>
+                    <ol>
+                        <li><strong>只在最顶层使用Hooks</strong>：不要在循环、条件或嵌套函数中调用Hooks</li>
+                        <li><strong>只在React函数中调用Hooks</strong>：在React的函数组件或自定义Hooks中调用</li>
+                    </ol>
+
+                    <h2>性能优化</h2>
+                    <p>React提供了几个用于性能优化的Hooks：</p>
+
+                    <h3>useMemo</h3>
+                    <p>useMemo用于缓存计算结果，避免在每次渲染时都进行昂贵的计算。</p>
+
+                    <pre><code class="language-javascript">
+import React, { useMemo } from 'react';
+
+function ExpensiveComponent({ a, b }) {
+    const expensiveValue = useMemo(() => {
+        return a * b; // 假设这是一个昂贵的计算
+    }, [a, b]);
+
+    return <div>{expensiveValue}</div>;
+}
+                    </code></pre>
+
+                    <h3>useCallback</h3>
+                    <p>useCallback用于缓存函数，避免在每次渲染时都创建新的函数实例。</p>
+
+                    <pre><code class="language-javascript">
+import React, { useCallback } from 'react';
+
+function ParentComponent() {
+    const [count, setCount] = useState(0);
+    
+    const handleClick = useCallback(() => {
+        console.log('Button clicked');
+    }, []);
+
+    return <ChildComponent onClick={handleClick} />;
+}
+                    </code></pre>
+
+                    <h2>最佳实践</h2>
+                    <ul>
+                        <li>保持Hooks简单和专注</li>
+                        <li>使用自定义Hooks提取和重用逻辑</li>
+                        <li>合理使用依赖数组避免不必要的重新渲染</li>
+                        <li>为自定义Hooks使用use开头命名</li>
+                        <li>使用ESLint插件检查Hooks的使用规则</li>
+                    </ul>
+
+                    <h2>总结</h2>
+                    <p>React Hooks彻底改变了我们编写React组件的方式，让代码更加简洁、可读性更强。通过合理使用各种Hooks，我们可以构建出更加高效和可维护的React应用。</p>
+
+                    <p>随着React生态系统的不断发展，Hooks已经成为现代React开发的标配。掌握Hooks的使用不仅是提升开发效率的关键，也是跟上React发展步伐的必经之路。</p>
+                </div>
+
+                <!-- 文章底部 -->
+                <div class="article-footer">
+                    <div class="share-section">
+                        <h3>分享这篇文章</h3>
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+                            <a href="#" class="share-btn facebook"><i class="fab fa-facebook"></i> Facebook</a>
+                            <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                            <a href="#" class="share-btn wechat"><i class="fab fa-weixin"></i> 微信</a>
+                        </div>
+                    </div>
+
+                    <div class="author-section">
+                        <div class="author-info">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=987&q=80" alt="作者头像" class="author-avatar">
+                            <div class="author-details">
+                                <h4>博主</h4>
+                                <p>热爱技术的开发者，专注于前端开发和人工智能</p>
+                                <div class="author-social">
+                                    <a href="#"><i class="fab fa-github"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- 相关文章 -->
+    <section class="related-articles">
+        <div class="container">
+            <h2>相关文章</h2>
+            <div class="related-grid">
+                <article class="related-card">
+                    <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="React性能优化">
+                    <h3>React性能优化实战指南</h3>
+                    <p>深入探讨React应用性能优化的各种技巧和最佳实践...</p>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+                <article class="related-card">
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="TypeScript">
+                    <h3>TypeScript在React项目中的应用</h3>
+                    <p>如何在React项目中优雅地使用TypeScript提升代码质量...</p>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+                <article class="related-card">
+                    <img src="https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Next.js">
+                    <h3>Next.js全栈开发实战</h3>
+                    <p>使用Next.js构建现代化的全栈应用，从入门到部署...</p>
+                    <a href="#" class="read-more">阅读全文</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 评论区域 -->
+    <section class="comments-section">
+        <div class="container">
+            <h2>评论</h2>
+            <div class="comment-form">
+                <h3>发表评论</h3>
+                <form>
+                    <div class="form-group">
+                        <input type="text" placeholder="你的名字" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="邮箱地址" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="你的评论" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">发表评论</button>
+                </form>
+            </div>
+            
+            <div class="comments-list">
+                <div class="comment">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80" alt="用户头像" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <h4>张三</h4>
+                            <span>2024年1月16日</span>
+                        </div>
+                        <p>非常详细的讲解！特别是useEffect的清理函数部分，让我对React Hooks有了更深的理解。</p>
+                    </div>
+                </div>
+                <div class="comment">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b332-3fc9-4d47-8e91-14dce4761c49?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80" alt="用户头像" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <h4>李四</h4>
+                            <span>2024年1月15日</span>
+                        </div>
+                        <p>请问useCallback和useMemo在实际项目中应该如何选择使用？</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>我的博客</h3>
+                    <p>分享技术、生活与思考</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="index.html#about">关于我</a></li>
+                        <li><a href="index.html#blog">博客</a></li>
+                        <li><a href="index.html#contact">联系</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>关注我</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 我的个人博客. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="article.js"></script>
+</body>
+</html>
